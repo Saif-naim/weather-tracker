@@ -19,6 +19,8 @@ const pressure = document.getElementById("pressure");
 const visibility = document.getElementById("visibility");
 const clouds = document.getElementById("clouds");
 
+const forecastContainer = document.getElementById("forecastContainer");
+
 async function getWeather(city) {
   try {
     errorMessage.textContent = "";
@@ -34,9 +36,48 @@ async function getWeather(city) {
     }
 
     displayWeather(data);
+    getForecast(city);
     localStorage.setItem("lastCity", city);
   } catch (error) {
     errorMessage.textContent = "Something went wrong. Please try again.";
+  }
+}
+
+async function getForecast(city) {
+  try {
+    forecastContainer.innerHTML = "";
+
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.cod !== "200") {
+      return;
+    }
+
+    const dailyForecasts = data.list.filter(item =>
+      item.dt_txt.includes("12:00:00")
+    );
+
+    dailyForecasts.slice(0, 5).forEach(item => {
+      const date = new Date(item.dt_txt);
+      const day = date.toLocaleDateString("en-US", { weekday: "short" });
+      const temp = Math.round(item.main.temp);
+      const icon = item.weather[0].icon;
+
+      const forecastCard = document.createElement("div");
+      forecastCard.className = "forecast-card";
+
+      forecastCard.innerHTML = `
+        <h4>${day}</h4>
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="Weather icon">
+        <p>${temp}°C</p>
+      `;
+
+      forecastContainer.appendChild(forecastCard);
+    });
+  } catch (error) {
+    console.log("Forecast error:", error);
   }
 }
 
@@ -98,6 +139,7 @@ locationBtn.addEventListener("click", () => {
 
         cityInput.value = data.name;
         displayWeather(data);
+        getForecast(data.name);
         localStorage.setItem("lastCity", data.name);
         errorMessage.textContent = "";
       } catch (error) {
