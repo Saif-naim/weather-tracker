@@ -25,7 +25,6 @@ async function getWeather(city) {
     weatherCard.classList.add("hidden");
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
     const response = await fetch(url);
     const data = await response.json();
 
@@ -54,7 +53,6 @@ function displayWeather(data) {
   clouds.textContent = `${data.clouds.all}%`;
 
   weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-
   weatherCard.classList.remove("hidden");
 }
 
@@ -77,7 +75,7 @@ cityInput.addEventListener("keydown", (event) => {
 
 locationBtn.addEventListener("click", () => {
   if (!navigator.geolocation) {
-    errorMessage.textContent = "Geolocation is not supported by your browser.";
+    errorMessage.textContent = "Geolocation is not supported.";
     return;
   }
 
@@ -90,12 +88,11 @@ locationBtn.addEventListener("click", () => {
 
       try {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-
         const response = await fetch(url);
         const data = await response.json();
 
         if (data.cod !== 200) {
-          errorMessage.textContent = "Could not get weather for your location.";
+          errorMessage.textContent = data.message || "Could not get weather for your location.";
           return;
         }
 
@@ -104,11 +101,22 @@ locationBtn.addEventListener("click", () => {
         localStorage.setItem("lastCity", data.name);
         errorMessage.textContent = "";
       } catch (error) {
-        errorMessage.textContent = "Could not get weather for your location.";
+        errorMessage.textContent = "Location weather failed. Try city search.";
       }
     },
-    () => {
-      errorMessage.textContent = "Location permission denied.";
+    (error) => {
+      if (error.code === 1) {
+        errorMessage.textContent = "Location permission denied. Please allow location.";
+      } else if (error.code === 2) {
+        errorMessage.textContent = "Location unavailable. Try city search.";
+      } else {
+        errorMessage.textContent = "Location request timed out. Try again.";
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     }
   );
 });
