@@ -14,8 +14,16 @@
 <body>
 
   <div class="app">
-    <h1>Weather Tracker</h1>
-    <p>Search weather by city name</p>
+    <div class="top-bar">
+      <div>
+        <h1>Weather Tracker</h1>
+        <p>Search weather by city name</p>
+      </div>
+
+      <button id="themeBtn" class="theme-btn">🌙</button>
+    </div>
+
+    <p id="dateTime" class="date-time"></p>
 
     <div class="search-box">
       <input type="text" id="cityInput" placeholder="Enter city name..." />
@@ -23,6 +31,8 @@
     </div>
 
     <button id="locationBtn" class="location-btn">📍 Use My Location</button>
+
+    <div id="loader" class="loader hidden"></div>
 
     <div id="weatherCard" class="weather-card hidden">
       <h2 id="cityName"></h2>
