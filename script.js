@@ -21,6 +21,10 @@ const feelsLike = document.getElementById("feelsLike");
 const pressure = document.getElementById("pressure");
 const visibility = document.getElementById("visibility");
 const clouds = document.getElementById("clouds");
+const maxTemp = document.getElementById("maxTemp");
+const minTemp = document.getElementById("minTemp");
+const sunrise = document.getElementById("sunrise");
+const sunset = document.getElementById("sunset");
 
 const forecastContainer = document.getElementById("forecastContainer");
 
@@ -62,6 +66,30 @@ const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "light") {
   document.body.classList.add("light");
   themeBtn.textContent = "☀️";
+}
+
+function formatTime(unixTime, timezone) {
+  const date = new Date((unixTime + timezone) * 1000);
+
+  return date.toUTCString().slice(17, 22);
+}
+
+function updateBackground(weatherMain) {
+  document.body.classList.remove("clear", "clouds", "rain", "thunderstorm", "snow");
+
+  const weather = weatherMain.toLowerCase();
+
+  if (weather === "clear") {
+    document.body.classList.add("clear");
+  } else if (weather === "clouds") {
+    document.body.classList.add("clouds");
+  } else if (weather === "rain" || weather === "drizzle") {
+    document.body.classList.add("rain");
+  } else if (weather === "thunderstorm") {
+    document.body.classList.add("thunderstorm");
+  } else if (weather === "snow") {
+    document.body.classList.add("snow");
+  }
 }
 
 async function getWeather(city) {
@@ -139,7 +167,14 @@ function displayWeather(data) {
   visibility.textContent = `${data.visibility / 1000} km`;
   clouds.textContent = `${data.clouds.all}%`;
 
+  maxTemp.textContent = `${Math.round(data.main.temp_max)}°C`;
+  minTemp.textContent = `${Math.round(data.main.temp_min)}°C`;
+  sunrise.textContent = formatTime(data.sys.sunrise, data.timezone);
+  sunset.textContent = formatTime(data.sys.sunset, data.timezone);
+
   weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+
+  updateBackground(data.weather[0].main);
   weatherCard.classList.remove("hidden");
 }
 
