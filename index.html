@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
+  <div class="app">
+    <h1>Weather Tracker</h1>
+    <p>Search weather by city name</p>
+
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter city name..." />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div id="weatherCard" class="weather-card hidden">
+      <h2 id="cityName"></h2>
+      <img id="weatherIcon" alt="Weather icon" />
+      <h1 id="temperature"></h1>
+      <p id="description"></p>
+
+      <div class="details">
+        <p>Humidity: <span id="humidity"></span></p>
+        <p>Wind: <span id="wind"></span></p>
+        <p>Feels Like: <span id="feelsLike"></span></p>
+      </div>
+    </div>
+
+    <p id="errorMessage"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
