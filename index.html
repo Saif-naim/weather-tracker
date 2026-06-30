@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Weather Tracker</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -20,6 +22,8 @@
       <button id="searchBtn">Search</button>
     </div>
 
+    <button id="locationBtn" class="location-btn">📍 Use My Location</button>
+
     <div id="weatherCard" class="weather-card hidden">
       <h2 id="cityName"></h2>
       <img id="weatherIcon" alt="Weather icon" />
@@ -27,13 +31,20 @@
       <p id="description"></p>
 
       <div class="details">
-        <p>Humidity: <span id="humidity"></span></p>
-        <p>Wind: <span id="wind"></span></p>
-        <p>Feels Like: <span id="feelsLike"></span></p>
+        <p>Humidity <span id="humidity"></span></p>
+        <p>Wind <span id="wind"></span></p>
+        <p>Feels Like <span id="feelsLike"></span></p>
+        <p>Pressure <span id="pressure"></span></p>
+        <p>Visibility <span id="visibility"></span></p>
+        <p>Clouds <span id="clouds"></span></p>
       </div>
     </div>
 
     <p id="errorMessage"></p>
+
+    <footer>
+      Built by Naim | Powered by OpenWeather
+    </footer>
   </div>
 
   <script src="script.js"></script>
