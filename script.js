@@ -3,9 +3,12 @@ const apiKey = "d35a9d0c00b3d5fb00a5775b007f38fb";
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const locationBtn = document.getElementById("locationBtn");
+const themeBtn = document.getElementById("themeBtn");
 
 const weatherCard = document.getElementById("weatherCard");
 const errorMessage = document.getElementById("errorMessage");
+const loader = document.getElementById("loader");
+const dateTime = document.getElementById("dateTime");
 
 const cityName = document.getElementById("cityName");
 const weatherIcon = document.getElementById("weatherIcon");
@@ -21,14 +24,56 @@ const clouds = document.getElementById("clouds");
 
 const forecastContainer = document.getElementById("forecastContainer");
 
+function showLoader() {
+  loader.classList.remove("hidden");
+  weatherCard.classList.add("hidden");
+}
+
+function hideLoader() {
+  loader.classList.add("hidden");
+}
+
+function updateDateTime() {
+  const now = new Date();
+
+  dateTime.textContent = now.toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("light");
+
+  const isLight = document.body.classList.contains("light");
+  themeBtn.textContent = isLight ? "☀️" : "🌙";
+
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+});
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "light") {
+  document.body.classList.add("light");
+  themeBtn.textContent = "☀️";
+}
+
 async function getWeather(city) {
   try {
     errorMessage.textContent = "";
-    weatherCard.classList.add("hidden");
+    showLoader();
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     const response = await fetch(url);
     const data = await response.json();
+
+    hideLoader();
 
     if (data.cod !== 200) {
       errorMessage.textContent = "City not found. Please try again.";
@@ -39,6 +84,7 @@ async function getWeather(city) {
     getForecast(city);
     localStorage.setItem("lastCity", city);
   } catch (error) {
+    hideLoader();
     errorMessage.textContent = "Something went wrong. Please try again.";
   }
 }
@@ -121,6 +167,7 @@ locationBtn.addEventListener("click", () => {
   }
 
   errorMessage.textContent = "Getting your location...";
+  showLoader();
 
   navigator.geolocation.getCurrentPosition(
     async (position) => {
@@ -131,6 +178,8 @@ locationBtn.addEventListener("click", () => {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
         const response = await fetch(url);
         const data = await response.json();
+
+        hideLoader();
 
         if (data.cod !== 200) {
           errorMessage.textContent = data.message || "Could not get weather for your location.";
@@ -143,10 +192,13 @@ locationBtn.addEventListener("click", () => {
         localStorage.setItem("lastCity", data.name);
         errorMessage.textContent = "";
       } catch (error) {
+        hideLoader();
         errorMessage.textContent = "Location weather failed. Try city search.";
       }
     },
     (error) => {
+      hideLoader();
+
       if (error.code === 1) {
         errorMessage.textContent = "Location permission denied. Please allow location.";
       } else if (error.code === 2) {
