@@ -3,65 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weather Tracker</title>
-
+  <title>Weather Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="app">
+  <main class="dashboard">
     <div class="top-bar">
-      <div>
-        <h1>Weather Tracker</h1>
-        <p>Search weather by city name</p>
-      </div>
-      <button id="themeBtn" class="theme-btn">🌙</button>
-    </div>
+      <button id="themeBtn" class="theme-btn">🌙 Dark Mode</button>
 
-    <p id="dateTime" class="date-time"></p>
-
-    <div class="search-box">
-      <input type="text" id="cityInput" placeholder="Enter city name..." />
-      <button id="searchBtn">Search</button>
-    </div>
-
-    <button id="locationBtn" class="location-btn">📍 Use My Location</button>
-
-    <div id="loader" class="loader hidden"></div>
-
-    <div id="weatherCard" class="weather-card hidden">
-      <h2 id="cityName"></h2>
-      <img id="weatherIcon" alt="Weather icon" />
-      <h1 id="temperature"></h1>
-      <p id="description"></p>
-
-      <div class="details">
-        <p>💧 Humidity <span id="humidity"></span></p>
-        <p>🌬 Wind <span id="wind"></span></p>
-        <p>🌡 Feels Like <span id="feelsLike"></span></p>
-        <p>📈 Pressure <span id="pressure"></span></p>
-        <p>👁 Visibility <span id="visibility"></span></p>
-        <p>☁ Clouds <span id="clouds"></span></p>
-        <p>🔥 Max Temp <span id="maxTemp"></span></p>
-        <p>❄️ Min Temp <span id="minTemp"></span></p>
-        <p>🌅 Sunrise <span id="sunrise"></span></p>
-        <p>🌇 Sunset <span id="sunset"></span></p>
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="cityInput" placeholder="Search for your preferred city..." />
       </div>
 
-      <h3 class="forecast-title">5-Day Forecast</h3>
-      <div id="forecastContainer" class="forecast-container"></div>
+      <button id="locationBtn" class="location-btn">📍 Current Location</button>
     </div>
 
     <p id="errorMessage"></p>
+    <div id="loader" class="loader hidden"></div>
 
-    <footer>
-      Built by Naim | Powered by OpenWeather
-    </footer>
-  </div>
+    <section id="weatherContent" class="content hidden">
+      <div class="city-card">
+        <h2 id="cityName">City</h2>
+        <h1 id="cityTime">00:00</h1>
+        <p id="cityDate">Date</p>
+      </div>
+
+      <div class="main-card">
+        <div>
+          <h1 id="temperature">--°C</h1>
+          <p>Feels like: <span id="feelsLike">--°C</span></p>
+          <div class="sun-row">🌅 Sunrise: <span id="sunrise">--:--</span></div>
+          <div class="sun-row">🌇 Sunset: <span id="sunset">--:--</span></div>
+        </div>
+
+        <div class="weather-center">
+          <img id="weatherIcon" alt="weather icon">
+          <h2 id="description">Weather</h2>
+        </div>
+
+        <div class="details-grid">
+          <div>💧<strong id="humidity">--%</strong><span>Humidity</span></div>
+          <div>🌬<strong id="wind">--</strong><span>Wind</span></div>
+          <div>📈<strong id="pressure">--</strong><span>Pressure</span></div>
+          <div>☁️<strong id="clouds">--%</strong><span>Clouds</span></div>
+        </div>
+      </div>
+
+      <div class="forecast-card">
+        <h2>5 Days Forecast</h2>
+        <div id="forecastContainer"></div>
+      </div>
+
+      <div class="hourly-card">
+        <h2>Hourly Forecast</h2>
+        <div id="hourlyContainer" class="hourly-container"></div>
+      </div>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
